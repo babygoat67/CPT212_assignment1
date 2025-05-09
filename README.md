@@ -16,44 +16,9 @@ Developed as part of the CPT212 course (Sem II, 2024/2025). Group-based assignme
 
 ---
 
-## 🛠️ Setup
+###👥 Authors
+Member 1: Choo Yit Shern
 
-### Requirements
-- Java 11+
-- Maven
-- (Optional) Python 3.8+ with `matplotlib` for graphs
+Member 2: Yeap Jiong Ming
 
-### Build & Run
-```bash
-# Clone and build
-git clone https://github.com/<your-username>/cpt212-assignment1.git
-cd cpt212-assignment1
-mvn package
-
-# Run number sorter
-java -jar target/sorter.jar --mode numbers --input data/numbers.txt
-
-# Run word sorter
-java -jar target/sorter.jar --mode words --input data/words.txt
-
-# Generate graph (optional)
-python scripts/benchmark.py --out results/ops_vs_n.png
-📁 Structure
-bash
-Copy
-Edit
-├─ src/               # Java source code
-├─ data/              # Input files
-├─ results/           # Output graphs and logs
-├─ scripts/benchmark.py
-├─ README.md
-📈 Results
-The sorting algorithms were benchmarked for n = 100–1000.
-Graph:
-
-👥 Authors
-Leader: <Your Name>
-
-Member 2: <Name>
-
-Member 3: <Name>
+Member 3: Law Zhe Yin
