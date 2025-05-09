@@ -15,10 +15,9 @@ This project includes:
 Developed as part of the CPT212 course (Sem II, 2024/2025). Group-based assignment.
 
 ---
+## 👥 Authors
 
-###👥 Authors
-Member 1: Choo Yit Shern
+- **Member 1:** Choo Yit Shern  
+- **Member 2:** Yeap Jiong Ming  
+- **Member 3:** Law Zhe Yin  
 
-Member 2: Yeap Jiong Ming
-
-Member 3: Law Zhe Yin
