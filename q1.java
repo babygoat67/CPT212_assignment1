@@ -30,14 +30,17 @@ public class q1 {
         return length;
     }
 
-    // Reads user input to create and return an integer array.
+    // Reads user input to create and return an integer array..
     public static int[] getNumInput() {
         System.out.print("Enter the number of elements in the array: ");
         int n = sc.nextInt();
+        sc.nextLine(); 
         int arr[] = new int[n];
-        System.out.println("Enter the elements of the array: ");
+        System.out.println("Enter the elements of the array (separated by space or comma): ");
+        String input = sc.nextLine();
+        String[] tokens = input.replace(",", " ").split("\\s+");
         for (int i = 0; i < n; i++) {
-            arr[i] = sc.nextInt();
+            arr[i] = Integer.parseInt(tokens[i]);
         }
         System.out.println("Input array: " + Arrays.toString(arr));
         return arr;

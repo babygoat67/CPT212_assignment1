@@ -6,13 +6,13 @@ public class q2 {
     private static Scanner sc = new Scanner(System.in);
     public static int counter = 0;
 
-    // Returns the maximum length among all words
+    // Returns the maximum length among all words.
     public static int getLength(String arr[]) {
         counter++; // method call
         int max = arr[0].length();
         counter += 3; // assignment, lookup and function call
         for (int i = 1; i < arr.length; i++) {
-            counter += 3;// assignment, comparison and addition
+            counter += 3; // assignment, comparison and addition
             if (arr[i].length() > max) {
                 counter += 3; // lookup, function call and comparison
                 max = arr[i].length();
@@ -24,41 +24,39 @@ public class q2 {
     }
 
     // Reads user input to create and return a String array,
-    // converting every word to lowercase.
     public static String[] getStringInput() {
         System.out.print("Enter the number of elements in the array: ");
         int n = sc.nextInt();
         String arr[] = new String[n];
         System.out.println("Enter the elements of the array: ");
         for (int i = 0; i < n; i++) {
-            arr[i] = sc.next().toLowerCase(); // Convert input to lowercase
+            arr[i] = sc.next().replace(",", "").toLowerCase(); 
         }
         System.out.println("Input array: " + Arrays.toString(arr));
         return arr;
     }
 
     // Places words into buckets based on the character at the specified position.
-    // Sorting starts from the last character of each word.
+    // Uses bucket index 0 for words that have no character at that position.
     public static void charPositionSort(String[] words, String[][] arrayBuckets, int pos) {
         counter++; // method call
-
         for (int i = 0; i < words.length; i++) {
             counter += 3; // assignment, comparison and addition
-            String word = words[i];
+            String word = words[i]; 
             counter += 2; // assignment and lookup
             int bucketIndex = 0;
-            counter++; // assignment
-            if (word.length() - 1 - pos >= 0) { // Get character from the end
-                counter += 4; // function call, 2 subtraction and comparison
-                bucketIndex = word.charAt(word.length() - 1 - pos) - 'a' + 1;
-                counter += 7; // assignment, 2 function call, 3 subtraction, addition
+            counter++ ; // assignment
+            if (pos < word.length()) {
+                counter += 2; // comparison and function call
+                bucketIndex = word.charAt(pos) - 'a' + 1;
+                counter += 4; // assignment, function call, subtraction and addition
             }
             for (int j = 0; j < arrayBuckets[bucketIndex].length; j++) {
                 counter += 3; // assignment, comparison and addition
                 if (arrayBuckets[bucketIndex][j] == null) {
                     counter++; // comparison
                     arrayBuckets[bucketIndex][j] = word;
-                    counter++; // assignment
+                    counter++ ; // assignment
                     break;
                 }
             }
@@ -66,7 +64,7 @@ public class q2 {
     }
 
     // Processes subsequent passes by distributing words into new buckets,
-    // based on the character at the current position from the end.
+    // based on the character at the current position.
     public static void subsequentCharSort(String[][] current, String[][] next, int pos) {
         counter++; // method call
         for (int i = 0; i < current.length; i++) {
@@ -79,10 +77,10 @@ public class q2 {
                     counter++; // comparison
                     int bucketIndex = 0;
                     counter++; // assignment
-                    if (word.length() - 1 - pos >= 0) { // Get character from the end
-                        counter += 4; // function call, 2 subtraction and comparison
-                        bucketIndex = word.charAt(word.length() - 1 - pos) - 'a' + 1;
-                        counter += 7; // assignment, 2 function call, 3 subtraction, addition
+                    if (pos < word.length()) {
+                        counter += 2; // comparison and function call
+                        bucketIndex = word.charAt(pos) - 'a' + 1;
+                        counter += 4; // assignment, function call, subtraction and addition
                     }
                     for (int k = 0; k < next[bucketIndex].length; k++) {
                         counter += 3; // assignment, comparison and addition
@@ -116,26 +114,32 @@ public class q2 {
                 }
             }
         }
-        counter += 2; // return, function call
         return Arrays.copyOf(result, index);
     }
 
     // Prints each word bucket with a corresponding letter label.
     public static void printWordBuckets(String[][] arrayBuckets) {
-        for (int i = 0; i < arrayBuckets.length; i++) {
-            String label = (i == 0) ? "Bucket _" : "Bucket " + (char)('a' + i - 1);
-            System.out.printf("%s: [", label);
-            boolean first = true;
-            for (String word : arrayBuckets[i]) {
-                if (word != null) {
-                    if (!first) System.out.print(", ");
-                    System.out.print(word);
-                    first = false;
-                }
-            }
-            System.out.println("]");
+    for (int i = 0; i < arrayBuckets.length; i++) {
+        String label;
+        if (i == 0) {
+            label = "_";
+        } else {
+            label = String.valueOf((char)('a' + i - 1));
         }
+
+        System.out.printf("Bucket %s: [", label);
+
+        boolean first = true;
+        for (String word : arrayBuckets[i]) {
+            if (word != null) {
+                if (!first) System.out.print(", ");
+                System.out.print(word);
+                first = false;
+            }
+        }
+        System.out.println("]");
     }
+}
 
     // Prints the flattened, sorted array of words.
     public static void printWords(String[] words) {
@@ -152,14 +156,13 @@ public class q2 {
         String[][] arrayStrBuckets2 = new String[27][words.length];
         boolean useArrayStrBuckets1 = true;
 
-        // Process from last character (pos = 0) to the first character
-        for (int pos = 0; pos < maxLength; pos++) {
-            System.out.printf("%nAfter pass %d:%n", pos + 1);
+        for (int pos = maxLength - 1; pos >= 0; pos--) {
+            System.out.printf("%nSorting position %d:%n", pos + 1);
 
             if (useArrayStrBuckets1) {
                 for (int i = 0; i < 27; i++) Arrays.fill(arrayStrBuckets2[i], null);
 
-                if (pos == 0) {
+                if (pos == maxLength - 1) {
                     charPositionSort(words, arrayStrBuckets2, pos);
                 } else {
                     subsequentCharSort(arrayStrBuckets1, arrayStrBuckets2, pos);
@@ -184,6 +187,6 @@ public class q2 {
 
         System.out.println("\nFinal Sorted Words:");
         printWords(sortedWords);
-        System.out.println("Total primitive operations: " + counter);
+        System.out.println("Total number of operations: " + counter);
     }
 }
