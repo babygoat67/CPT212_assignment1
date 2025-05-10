@@ -6,7 +6,7 @@ public class q1 {
     private static Scanner sc = new Scanner(System.in);
     public static int counter = 0;  // counter for primitive operations
     
-    // Returns the maximum number of digits the array.
+    // Returns the maximum number of digits in the array.
     public static int getLength(int arr[]) {
         counter++; // method call 
         int max = arr[0];
@@ -121,7 +121,7 @@ public class q1 {
             System.out.printf("arrayBuckets %d: [", i);
             boolean first = true;
             for (int num : arrayBuckets[i]) {
-                if (num != -1) {    // filter out empty (-1) values wchich will not be output
+                if (num != -1) {    // filter out empty (-1) values which will not be output
                     if (!first) System.out.print(", ");
                     System.out.print(num);
                     first = false;
