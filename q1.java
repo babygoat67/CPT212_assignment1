@@ -4,22 +4,30 @@ import java.util.Scanner;
 public class q1 {
 
     private static Scanner sc = new Scanner(System.in);
+    public static int counter = 0;
     
-    // Returns the number of digits in the maximum number of the array,
-    // which determines how many passes are needed for the radix sort.
+    // Returns the number of digits in the maximum number of the array.
     public static int getLength(int arr[]) {
+        counter++; // method call 
         int max = arr[0];
+        counter += 2; // assignment and lookup
         int length = 0;
-        for (int i = 1; i < arr.length; i++) {
+        counter ++; // assignment
+        for (int i = 1; i < arr.length; i++) { 
+            counter += 3; // assignment, comparison, addition
             if (arr[i] > max) {
                 max = arr[i];
+                counter += 3; // comparison, assignment and lookup
             }
         }
         while (max > 0) {
             max /= 10;
             length++;
+            counter += 5; //comparison, 2 assignment, division and addition
         }
-        return length == 0 ? 1 : length;
+        
+        counter++; //return
+        return length;
     }
 
     // Reads user input to create and return an integer array.
@@ -37,17 +45,19 @@ public class q1 {
 
     // Distributes numbers into buckets according to their units (ones) digit.
     public static void unitDigitSort(int arr[], int arrayBuckets[][]) {
+        counter ++; //method call
         for (int i = 0; i < arr.length; i++) {
-            // Retrieve the number from the input array.
+            counter += 3; // assignment, comparison and addition
             int num = arr[i];
-            // Calculate the units digit. Division by 1 is redundant but follows the same pattern.
+            counter += 2; // assignment and lookup
             int digit = (num / 1) % 10;
-            // Traverse the bucket corresponding to this units digit.
+            counter += 3; // assignment, division, and modulus
             for (int j = 0; j < arrayBuckets[digit].length; j++) {
-                // If the slot is empty (marked by -1), place the number here.
+                counter += 3; // assignment ,comparison, addition
                 if (arrayBuckets[digit][j] == -1) {
+                    counter ++; //comparison
                     arrayBuckets[digit][j] = num;
-                    // Number placed successfully; break out of the current loop.
+                    counter += 2; // assignment and lookup
                     break;
                 }
             }
@@ -56,19 +66,23 @@ public class q1 {
 
     // Sorts the numbers according to subsequent digit positions using alternate buckets.
     public static void subsequentDigitSort(int[][] current, int[][] next, int exp) {
+        counter ++; // method call
         for (int i = 0; i < current.length; i++) {
-            // Iterate over each bucket in the current array.
+            counter += 3; //assignment, comparision and addition
             for (int j = 0; j < current[i].length; j++) {
+                counter += 3; // assignment, comparison and addition
                 int val = current[i][j];
-                // Process only valid numbers (i.e. not -1, which marks an empty slot).
+                counter += 2; //assignment and lookup
                 if (val != -1) {
-                    // Extract the digit at the current place value determined by exp.
+                    counter++; //comparison
                     int digit = (val / exp) % 10;
-                    // Locate the first available slot in the target bucket (in the next array).
+                    counter += 3; // assignment, division and modulus
                     for (int k = 0; k < next[digit].length; k++) {
+                        counter += 3; // assignment, comparison and addition
                         if (next[digit][k] == -1) {
+                            counter++; //comparison
                             next[digit][k] = val;
-                            // Once the value is placed, exit the inner-most loop.
+                            counter += 2; // assignment and lookup
                             break;
                         }
                     }
@@ -79,15 +93,22 @@ public class q1 {
 
     // Converts the 2D buckets into a flattened 1D sorted array.
     public static int[] flattenArrayBuckets(int[][] arrayBuckets, int size) {
+        counter ++; // method call
         int[] result = new int[size];
         int index = 0;
+        counter += 2; // 2 assignments
         for (int i = 0; i < arrayBuckets.length; i++) {
+            counter += 3; // assignment, comparison and addition
             for (int j = 0; j < arrayBuckets[i].length; j++) {
+                counter += 3; // assignment, comparison and addition
                 if (arrayBuckets[i][j] != -1) {
+                    counter++; //comparison
                     result[index++] = arrayBuckets[i][j];
+                    counter += 3; // assignment, lookup and addition
                 }
             }
         }
+        counter++;
         return result;
     }
 
@@ -126,7 +147,7 @@ public class q1 {
         }
 
         unitDigitSort(nums, arrayBuckets1);
-        System.out.println("\nAfter pass 1 (units digit):");
+        System.out.println("\nAfter pass 1 (digit place = 1):");
         printArrayBuckets(arrayBuckets1);
         System.out.print("Flattened: ");
         printArray(flattenArrayBuckets(arrayBuckets1, nums.length));
@@ -158,5 +179,6 @@ public class q1 {
                 flattenArrayBuckets(arrayBuckets2, nums.length);
         System.out.println("\nFinal Sorted Numbers:");
         printArray(sortedNums);
+        System.out.println("Total primitive operations: " + counter);
     }
 }

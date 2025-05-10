@@ -4,16 +4,22 @@ import java.util.Scanner;
 public class q2 {
 
     private static Scanner sc = new Scanner(System.in);
+    public static int counter = 0;
 
-    // Returns the maximum length among all words,
-    // which determines the number of passes needed.
+    // Returns the maximum length among all words
     public static int getLength(String arr[]) {
+        counter++; // method call
         int max = arr[0].length();
+        counter += 3; // assignment, lookup and function call
         for (int i = 1; i < arr.length; i++) {
+            counter += 3;// assignment, comparison and addition
             if (arr[i].length() > max) {
+                counter += 3; // lookup, function call and comparison
                 max = arr[i].length();
+                counter += 3; // assignment, lookup and function call
             }
         }
+        counter++; // return
         return max;
     }
 
@@ -32,20 +38,27 @@ public class q2 {
     }
 
     // Places words into buckets based on the character at the specified position.
-    // Uses bucket index 0 for words that have no character at that position.
+    // Sorting starts from the last character of each word.
     public static void charPositionSort(String[] words, String[][] arrayBuckets, int pos) {
-        for (String word : words) {
-            // Default bucket index 0 for words lacking a character at this position.
+        counter++; // method call
+
+        for (int i = 0; i < words.length; i++) {
+            counter += 3; // assignment, comparison and addition
+            String word = words[i];
+            counter += 2; // assignment and lookup
             int bucketIndex = 0;
-            if (pos < word.length()) {
-                // Calculate index based on the character's offset from 'a'. The +1 shift reserves bucket 0.
-                bucketIndex = word.charAt(pos) - 'a' + 1;
+            counter++; // assignment
+            if (word.length() - 1 - pos >= 0) { // Get character from the end
+                counter += 4; // function call, 2 subtraction and comparison
+                bucketIndex = word.charAt(word.length() - 1 - pos) - 'a' + 1;
+                counter += 7; // assignment, 2 function call, 3 subtraction, addition
             }
-            // Traverse the selected bucket to locate an empty slot.
             for (int j = 0; j < arrayBuckets[bucketIndex].length; j++) {
+                counter += 3; // assignment, comparison and addition
                 if (arrayBuckets[bucketIndex][j] == null) {
+                    counter++; // comparison
                     arrayBuckets[bucketIndex][j] = word;
-                    // After placing the word, break to avoid duplicate entries.
+                    counter++; // assignment
                     break;
                 }
             }
@@ -53,24 +66,30 @@ public class q2 {
     }
 
     // Processes subsequent passes by distributing words into new buckets,
-    // based on the character at the current position.
+    // based on the character at the current position from the end.
     public static void subsequentCharSort(String[][] current, String[][] next, int pos) {
+        counter++; // method call
         for (int i = 0; i < current.length; i++) {
-            // Process each bucket from the current bucket array.
+            counter += 3; // assignment, comparison and addition
             for (int j = 0; j < current[i].length; j++) {
+                counter += 3; // assignment, comparison and addition
                 String word = current[i][j];
+                counter += 2; // assignment and lookup
                 if (word != null) {
-                    // Default bucket for words that do not have a character at pos.
+                    counter++; // comparison
                     int bucketIndex = 0;
-                    if (pos < word.length()) {
-                        // Calculate bucket index from the character at position pos.
-                        bucketIndex = word.charAt(pos) - 'a' + 1;
+                    counter++; // assignment
+                    if (word.length() - 1 - pos >= 0) { // Get character from the end
+                        counter += 4; // function call, 2 subtraction and comparison
+                        bucketIndex = word.charAt(word.length() - 1 - pos) - 'a' + 1;
+                        counter += 7; // assignment, 2 function call, 3 subtraction, addition
                     }
-                    // Find an empty slot in the target bucket within the next array.
                     for (int k = 0; k < next[bucketIndex].length; k++) {
+                        counter += 3; // assignment, comparison and addition
                         if (next[bucketIndex][k] == null) {
+                            counter++; // comparison
                             next[bucketIndex][k] = word;
-                            // Word placed in the bucket; exit the loop.
+                            counter++; // assignment
                             break;
                         }
                     }
@@ -81,24 +100,31 @@ public class q2 {
 
     // Flattens the 2D array buckets into a single 1D array of sorted words.
     public static String[] flattenWordBuckets(String[][] arrayBuckets, int size) {
+        counter++; // method call
         String[] result = new String[size];
         int index = 0;
+        counter += 2; // 2 assignments
 
         for (int i = 0; i < arrayBuckets.length; i++) {
+            counter += 3; // assignment, comparison and addition
             for (int j = 0; j < arrayBuckets[i].length; j++) {
+                counter += 3; // assignment, comparison and addition
                 if (arrayBuckets[i][j] != null) {
+                    counter++; // comparison
                     result[index++] = arrayBuckets[i][j];
+                    counter += 3; // assignment, lookup and addition
                 }
             }
         }
+        counter += 2; // return, function call
         return Arrays.copyOf(result, index);
     }
 
     // Prints each word bucket with a corresponding letter label.
     public static void printWordBuckets(String[][] arrayBuckets) {
-        for (int i = 1; i < arrayBuckets.length; i++) {
-            char label = (char) ('a' + i - 1);
-            System.out.printf("Bucket %c: [", label);
+        for (int i = 0; i < arrayBuckets.length; i++) {
+            String label = (i == 0) ? "Bucket _" : "Bucket " + (char)('a' + i - 1);
+            System.out.printf("%s: [", label);
             boolean first = true;
             for (String word : arrayBuckets[i]) {
                 if (word != null) {
@@ -126,13 +152,14 @@ public class q2 {
         String[][] arrayStrBuckets2 = new String[27][words.length];
         boolean useArrayStrBuckets1 = true;
 
-        for (int pos = maxLength - 1; pos >= 0; pos--) {
-            System.out.printf("%nSorting position %d:%n", pos + 1);
+        // Process from last character (pos = 0) to the first character
+        for (int pos = 0; pos < maxLength; pos++) {
+            System.out.printf("%nAfter pass %d:%n", pos + 1);
 
             if (useArrayStrBuckets1) {
                 for (int i = 0; i < 27; i++) Arrays.fill(arrayStrBuckets2[i], null);
 
-                if (pos == maxLength - 1) {
+                if (pos == 0) {
                     charPositionSort(words, arrayStrBuckets2, pos);
                 } else {
                     subsequentCharSort(arrayStrBuckets1, arrayStrBuckets2, pos);
@@ -157,5 +184,6 @@ public class q2 {
 
         System.out.println("\nFinal Sorted Words:");
         printWords(sortedWords);
+        System.out.println("Total primitive operations: " + counter);
     }
 }
